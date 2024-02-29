@@ -1,24 +1,14 @@
 <template>
   <q-page padding class="flex items-center justify-center">
     <q-card class="bg-positive p-2 w-full md:w-6/12">
-      <q-form @submit.prevent="login">
+      <q-form @submit.prevent="send">
         <div class="flex justify-center">
           <q-img src="/icons/icon-256x256.png" width="80px" />
         </div>
+        <h2 class="text-info text-center leading-6 mt-4">Enviaremos um link de confirmação para seu email cadastrado.</h2>
         <q-input filled label="Email" v-model="email" color="primary" input-class="text-primary" label-color="primary"
           type="email" required class="my-4" />
-        <q-input filled label="Senha" v-model="password" color="primary" input-class="text-primary" label-color="primary"
-          :type="type" required>
-          <template #append>
-            <q-btn round flat :icon="type == 'password' ? 'visibility' : 'visibility_off'" color="primary"
-              @click="type = type == 'password' ? 'text' : 'password'" />
-          </template>
-        </q-input>
-        <p class="text-primary">Esqueceu a senha? <q-btn flat unelevated label="recuperar" :to="`/send-reset?email=${email}`" color="primary" /></p>
-
-        <q-btn size="lg" class="w-full  mt-6" color="primary" text-color="info" label="Entrar" type="submit" :loading="loading"/>
-        <p class="text-info my-4 text-center">Não tem cadastro? <q-btn flat unelevated label="Cadastrar" color="info"
-            to="/register" /></p>
+        <q-btn size="lg" class="w-full  mt-6" color="primary" text-color="info" label="Enviar" type="submit" :loading="loading"/>
       </q-form>
     </q-card>
   </q-page>
@@ -27,7 +17,6 @@
 <script>
 import { useQuasar } from "quasar";
 import {auth} from "src/boot/firebase"
-import { useUserStore } from "src/stores/user";
 export default {
   data() {
     return {
@@ -35,21 +24,31 @@ export default {
       password: null,
       type: 'password',
       loading:false,
-      q:useQuasar(),
-      store:useUserStore()
+      q:useQuasar()
+    }
+  },
+  mounted(){
+    if(this.$route.query && this.$route.query.email){
+      this.email = this.$route.query.email
     }
   },
   methods: {
-    login() {
+    send() {
       this.loading = true;
       const firebase = auth.getAuth();
-      auth.signInWithEmailAndPassword(firebase, this.email, this.password)
+      auth.sendPasswordResetEmail(firebase, this.email)
         .then((userCredential) => {
-          this.store.user = userCredential.user;
-          this.$router.push("/dash")
+          // Signed in 
+          const user = userCredential;
+          console.log(user)
+         
           this.loading = false;
+          // ...
         })
         .catch((error) => {
+          const errorCode = error.code;
+          const errorMessage = error.message;
+          console.log(error)
           if(error.code == 'auth/invalid-credential'){
             this.q.dialog({
               title:"Credenciais inválidas!",

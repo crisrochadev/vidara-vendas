@@ -1,6 +1,7 @@
 import { route } from 'quasar/wrappers'
 import { createRouter, createMemoryHistory, createWebHistory, createWebHashHistory } from 'vue-router'
 import routes from './routes'
+import { authUser } from 'src/boot/firebase'
 
 /*
  * If not building with SSR mode, you can
@@ -26,5 +27,22 @@ export default route(function (/* { store, ssrContext } */) {
     history: createHistory(process.env.VUE_ROUTER_BASE)
   })
 
+  Router.beforeEach(async (from, to, next) => {
+    const user = await authUser();
+    if (from.meta.protected) {
+      if (user) {
+        next()
+      } else {
+        next("/")
+      }
+    } else {
+      if (user) {
+        next("/dash")
+      } else {
+        next()
+      }
+
+    }
+  })
   return Router
 })

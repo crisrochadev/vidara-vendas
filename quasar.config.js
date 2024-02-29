@@ -53,7 +53,7 @@ module.exports = configure(function (/* ctx */) {
         node: 'node20'
       },
 
-      vueRouterMode: 'hash', // available values: 'hash', 'history'
+      vueRouterMode: 'history', // available values: 'hash', 'history'
       // vueRouterBase,
       // vueDevtools,
       // vueOptionsAPI: false,
@@ -81,6 +81,10 @@ module.exports = configure(function (/* ctx */) {
     // Full list of options: https://v2.quasar.dev/quasar-cli-vite/quasar-config-js#devServer
     devServer: {
       // https: true
+      historyApiFallback: true,
+      watchOptions: {
+        poll: 1000 // Check for changes every second
+      },
       open: true // opens browser window automatically
     },
 
@@ -90,6 +94,7 @@ module.exports = configure(function (/* ctx */) {
         brand:{
           primary:"#daa420",
           secondary:"#20213D",
+          positive:"#20213D",
           accent:"#353654",
           info:"#ffffff",
           positive:'#20213D'
@@ -107,7 +112,7 @@ module.exports = configure(function (/* ctx */) {
       // directives: [],
 
       // Quasar plugins
-      plugins: []
+      plugins: ["Notify","Dialog","Loading"]
     },
 
     // animations: 'all', // --- includes all animations

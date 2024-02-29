@@ -14,7 +14,7 @@
               @click="type = type == 'password' ? 'text' : 'password'" />
           </template>
         </q-input>
-        <p class="text-primary">Esqueceu a senha? <q-btn flat unelevated label="recuperar" :to="`/send-reset?email=${email}`" color="primary" /></p>
+        <p class="text-primary">Esqueceu a senha? <q-btn flat unelevated label="recuperar" color="primary" /></p>
 
         <q-btn size="lg" class="w-full  mt-6" color="primary" text-color="info" label="Entrar" type="submit" :loading="loading"/>
         <p class="text-info my-4 text-center">Não tem cadastro? <q-btn flat unelevated label="Cadastrar" color="info"
@@ -27,7 +27,6 @@
 <script>
 import { useQuasar } from "quasar";
 import {auth} from "src/boot/firebase"
-import { useUserStore } from "src/stores/user";
 export default {
   data() {
     return {
@@ -35,8 +34,7 @@ export default {
       password: null,
       type: 'password',
       loading:false,
-      q:useQuasar(),
-      store:useUserStore()
+      q:useQuasar()
     }
   },
   methods: {
@@ -45,11 +43,17 @@ export default {
       const firebase = auth.getAuth();
       auth.signInWithEmailAndPassword(firebase, this.email, this.password)
         .then((userCredential) => {
-          this.store.user = userCredential.user;
-          this.$router.push("/dash")
+          // Signed in 
+          const user = userCredential.user;
+          console.log(user)
+         
           this.loading = false;
+          // ...
         })
         .catch((error) => {
+          const errorCode = error.code;
+          const errorMessage = error.message;
+          console.log(error.code)
           if(error.code == 'auth/invalid-credential'){
             this.q.dialog({
               title:"Credenciais inválidas!",

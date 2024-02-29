@@ -1,9 +1,16 @@
 <template>
-  <q-page padding class="w-full h-full relative grid" style="grid-template-rows:70px 1fr">
+  <q-page padding class="w-full h-full relative grid" style="grid-template-rows:55px 1fr">
+
     <div class="w-full flex justify-between items-center p-2">
-      <h2 class="text-primary uppercase font-bold">Clientes</h2>
-      <q-btn label="Novo" icon-right="add" color="primary" flat dense />
+
+      <q-input filled color="primary" label-color="primary" label="Pesquisar" class="w-[calc(100%_-_40px)]" v-model="search" dense>
+        <template #append>
+          <q-btn round flat icon="search" color="primary" />
+        </template>
+      </q-input>
+      <q-btn icon="add" color="primary" dense to="/new-client"/>
     </div>
+
     <div class="w-full h-full">
       <q-scroll-area class="w-full h-full">
         <q-list class="text-info font-bold">
@@ -66,7 +73,7 @@
 export default {
   data() {
     return {
-      clients: [
+      usersClients: [
         {
           code: '12344',
           name: 'Nome do Cliente',
@@ -284,6 +291,12 @@ export default {
           show: true,
         }
       ],
+      search:''
+    }
+  },
+  computed:{
+    clients(){
+      return this.usersClients.filter(c => c.name.toLowerCase().includes(this.search.toLowerCase()))
     }
   }
 }

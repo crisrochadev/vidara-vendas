@@ -1,8 +1,13 @@
 <template>
   <q-page padding class="w-full h-full relative grid" style="grid-template-rows:70px 1fr">
     <div class="w-full flex justify-between items-center p-2">
-      <h2 class="text-primary uppercase font-bold">Produtos</h2>
-      <q-btn label="Novo" icon-right="add" color="primary" flat dense />
+
+      <q-input filled color="primary" label-color="primary" label="Pesquisar" class="w-[calc(100%_-_40px)]" dense v-model="search">
+        <template #append>
+          <q-btn round flat icon="search" color="primary" />
+        </template>
+      </q-input>
+      <q-btn icon="add" color="primary" dense to="/new-product" />
     </div>
     <div class="w-full h-full">
       <q-scroll-area class="w-full h-full">
@@ -75,7 +80,7 @@
 export default {
   data() {
     return {
-      products: [
+      allProducts: [
         {
           code: '12344',
           name: 'nome do produto 1',
@@ -365,6 +370,12 @@ export default {
           show: true,
         }
       ],
+      search: ''
+    }
+  },
+  computed: {
+    products() {
+      return this.allProducts.filter(c => c.name.toLowerCase().includes(this.search.toLowerCase()) || c.code.toString().includes(this.search.toLowerCase()))
     }
   }
 }
