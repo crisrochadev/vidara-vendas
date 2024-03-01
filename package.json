@@ -12,7 +12,9 @@
   },
   "dependencies": {
     "@quasar/extras": "^1.16.4",
+    "@quasar/quasar-ui-qiconpicker": "^2.0.7",
     "firebase": "^10.8.0",
+    "moment": "^2.30.1",
     "pinia": "^2.0.11",
     "quasar": "^2.8.0",
     "vue": "^3.4.18",

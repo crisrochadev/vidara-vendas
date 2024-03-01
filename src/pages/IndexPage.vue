@@ -5,9 +5,9 @@
         <div class="flex justify-center">
           <q-img src="/icons/icon-256x256.png" width="80px" />
         </div>
-        <q-input filled label="Email" v-model="email" color="primary" input-class="text-primary" label-color="primary"
+        <q-input clearable filled label="Email" v-model="email" color="primary" input-class="text-primary" label-color="primary"
           type="email" required class="my-4" />
-        <q-input filled label="Senha" v-model="password" color="primary" input-class="text-primary" label-color="primary"
+        <q-input clearable filled label="Senha" v-model="password" color="primary" input-class="text-primary" label-color="primary"
           :type="type" required>
           <template #append>
             <q-btn round flat :icon="type == 'password' ? 'visibility' : 'visibility_off'" color="primary"

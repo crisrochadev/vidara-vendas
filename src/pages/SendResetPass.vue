@@ -40,7 +40,11 @@ export default {
         .then((userCredential) => {
           // Signed in 
           const user = userCredential;
-          console.log(user)
+          this.q.notify({
+            color:'green',
+            message:'Link enviado, acesse seu email, clique no link e recupere a sua senha!',
+            position:'top'
+          })
          
           this.loading = false;
           // ...
@@ -48,7 +52,7 @@ export default {
         .catch((error) => {
           const errorCode = error.code;
           const errorMessage = error.message;
-          console.log(error)
+
           if(error.code == 'auth/invalid-credential'){
             this.q.dialog({
               title:"Credenciais inválidas!",

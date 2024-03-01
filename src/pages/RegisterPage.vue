@@ -5,9 +5,9 @@
         <div class="flex justify-center">
           <q-img src="/icons/icon-256x256.png" width="80px" />
         </div>
-        <q-input filled label="Email" v-model="email" color="primary" input-class="text-primary" label-color="primary"
+        <q-input clearable filled label="Email" v-model="email" color="primary" input-class="text-primary" label-color="primary"
           type="email" required class="my-4" />
-        <q-input filled label="Senha" v-model="password" color="primary" input-class="text-primary" label-color="primary" 
+        <q-input clearable filled label="Senha" v-model="password" color="primary" input-class="text-primary" label-color="primary" 
           :type="type" required :rules="[
             val => val.length >= 6 || 'Sua senha precisa ter mais de 6 caracteres',
           ]">
@@ -16,7 +16,7 @@
               @click="type = type == 'password' ? 'text' : 'password'" />
           </template>
         </q-input>
-        <q-input :rules="[
+        <q-input clearable :rules="[
             val => val == password || 'As senhas precisam ser iguais',
           ]" class="mt-4" filled label="Repita a Senha" v-model="confirm" color="primary" input-class="text-primary"
           label-color="primary" :type="type" required>

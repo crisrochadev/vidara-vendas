@@ -6,7 +6,7 @@ const routes = [
     children: [
       { path: '', component: () => import('pages/IndexPage.vue'), meta:{title:"Entrar"} },
       { path: 'register', component: () => import('pages/RegisterPage.vue'), meta:{title:"Cadastro"} },
-      { path: 'send-reset', component: () => import('pages/SendResetPass.vue'), meta:{title:"Resetar Senha"} },
+      { path: 'send-reset', component: () => import('pages/SendResetPass.vue'), meta:{title:"Resetar"} },
       { path: 'reset', component: () => import('pages/ResetPass.vue'), meta:{title:"Resetar Senha"} },
       { path: 'dash', component: () => import('pages/Dashboard.vue'), meta:{protected:true,title:"Painel"} },
       { path: 'sell', component: () => import('pages/Sell.vue'), meta:{protected:true,title:"Vender"} },
