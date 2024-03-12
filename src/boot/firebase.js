@@ -9,6 +9,7 @@ import { getAnalytics } from "firebase/analytics";
 import moment from './date'
 // TODO: Add SDKs for Firebase products that you want to use
 // https://firebase.google.com/docs/web/setup#available-libraries
+import { getStorage , ref as stRef, uploadBytes,getDownloadURL  } from "firebase/storage";
 
 // Your web app's Firebase configuration
 // For Firebase JS SDK v7.20.0 and later, measurementId is optional
@@ -20,7 +21,8 @@ const firebaseConfig = {
   messagingSenderId: "243089139726",
   appId: "1:243089139726:web:2ce785ae9145d2e093f45f",
   measurementId: "G-RFLEBD6MSD",
-  databaseURL: "https://vidara-1e7fb-default-rtdb.firebaseio.com"
+  databaseURL: "https://vidara-1e7fb-default-rtdb.firebaseio.com",
+  storageBucket:"gs://vidara-1e7fb.appspot.com"
 
 };
 
@@ -30,7 +32,13 @@ export const analytics = getAnalytics(app);
 export const database = getDatabase(app);
 export const auth = { getAuth, signInWithEmailAndPassword, createUserWithEmailAndPassword, sendPasswordResetEmail, signOut };
 export const db = {getDatabase, ref, set, child, push, update, onValue}
-
+const st = getStorage()
+export const storage = {
+  st,
+  stRef,
+  uploadBytes,
+  getDownloadURL
+}
 export async function authUser() {
   const auth = getAuth();
   return await new Promise(resolve => {

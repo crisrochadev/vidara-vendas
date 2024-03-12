@@ -5,9 +5,10 @@
       <q-toolbar>
         <q-btn v-if="$route.meta.protected" flat round :icon="leftDrawerOpen ? 'close' : 'menu'"
           @click="leftDrawerOpen = !leftDrawerOpen" color="primary" />
-        <q-btn v-else-if="$route.path !== '/'" flat round icon="mdi-arrow-left" @click="$router.back()" color="primary" />
+        <q-btn v-else-if="$route.path !== '/'" flat round icon="mdi-arrow-left" @click="$router.back()"
+          color="primary" />
 
-        <q-toolbar-title class="flex items-center uppercase gap-2 font-bold text-[#daa420]">
+        <q-toolbar-title class="flex flex-nowrap items-center uppercase gap-2 font-bold text-[#daa420]">
           <q-avatar size="25px">
             <img src="/icons/logol.png">
           </q-avatar>
@@ -16,14 +17,15 @@
           </span>
         </q-toolbar-title>
         <q-space />
-        <q-btn dense flat round :icon="themeMode" @click="changeTheme" color="primary" />
+        <q-btn dense flat round :icon="themeMode"
+          @click="themeMode = themeMode == 'light_mode' ? 'dark_mode' : 'light_mode'" color="primary" />
       </q-toolbar>
     </q-header>
 
-    <q-drawer v-model="leftDrawerOpen" side="left" overlay behavior="desktop" elevated class="bg-secondary">
+    <q-drawer v-model="leftDrawerOpen" side="left" overlay behavior="desktop" elevated class="bg-positive">
       <q-list>
-        <q-item v-close-popup class="text-primary " :class="{ 'bg-primary text-positive': $route.path == item.to }" clickable
-          v-for="item in menu" :key="menu.id" :to="item.to ? item.to : '/'" @click="logout(item)">
+        <q-item v-close-popup class="text-primary " :class="{ 'bg-primary text-positive': $route.path == item.to }"
+          clickable v-for="item in menu" :key="menu.id" :to="item.to ? item.to : '/'" @click="logout(item)">
           <q-item-section side>
             <q-icon :name="item.icon" :color="$route.path == item.to ? 'positive' : 'primary'" />
           </q-item-section>
@@ -42,12 +44,13 @@
 </template>
 
 <script>
+import { useStorage } from '@vueuse/core';
 import { auth } from 'src/boot/firebase';
 export default {
   data() {
     return {
       leftDrawerOpen: false,
-      themeMode: 'light_mode',
+      themeMode: useStorage('theme_mode'),
       menu: [
         {
           id: 10,
@@ -106,6 +109,9 @@ export default {
       ]
     }
   },
+  mounted(){
+    this.changeTheme(this.themeMode)
+  },
   methods: {
     logout(item) {
       if (item.action) {
@@ -113,24 +119,25 @@ export default {
         auth.signOut(firebase)
       }
     },
-    changeTheme() {
-      setTimeout(() => {
-        if (this.themeMode == 'light_mode') {
-          document.body.style.setProperty("--q-secondary", "#20213D")
-          document.body.style.setProperty("--q-accent", "#f7f7ff")
-          document.body.style.setProperty("--q-primary", "#daa420")
-          document.body.style.setProperty("--q-info", "#20213D")
-          document.body.style.setProperty("--q-positive", "#e8e8fc")
-          this.themeMode = 'dark_mode'
-        } else {
-          document.body.style.setProperty("--q-primary", "#daa420")
-          document.body.style.setProperty("--q-secondary", "#20213D")
-          document.body.style.setProperty("--q-accent", "#353654")
-          document.body.style.setProperty("--q-info", "#ffffff")
-          document.body.style.setProperty("--q-positive", "#20213D")
-          this.themeMode = 'light_mode'
-        }
-      }, 20)
+    changeTheme(newvalue) {
+      if (newvalue == 'light_mode') {
+        document.body.style.setProperty("--q-secondary", "#20213D")
+        document.body.style.setProperty("--q-accent", "#f7f7ff")
+        document.body.style.setProperty("--q-primary", "#daa420")
+        document.body.style.setProperty("--q-info", "#20213D")
+        document.body.style.setProperty("--q-positive", "#e8e8fc")
+      } else {
+        document.body.style.setProperty("--q-primary", "#daa420")
+        document.body.style.setProperty("--q-secondary", "#20213D")
+        document.body.style.setProperty("--q-accent", "#353654")
+        document.body.style.setProperty("--q-info", "#ffffff")
+        document.body.style.setProperty("--q-positive", "#20213D")
+      }
+    }
+  },
+  watch: {
+    themeMode(newvalue) {
+      this.changeTheme(newvalue)
     }
   }
 }

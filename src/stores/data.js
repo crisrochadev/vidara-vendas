@@ -8,7 +8,8 @@ export const useData = defineStore('data', {
     materiais: [],
     levels: [],
     userId: null,
-    $q: useQuasar()
+    $q: useQuasar(),
+    products:[]
   }),
   actions: {
     async getUserId() {
@@ -21,25 +22,57 @@ export const useData = defineStore('data', {
       await this.getUserId();
       if (this.userId) {
         const starCountRef = db.ref(database, `${data_name}/` + this.userId);
-        db.onValue(starCountRef, (snapshot) => {
-          let val = snapshot.val()
-          if (val && typeof val == 'object' && Object.keys(val).length > 0) {
-            let valArray = [];
-            Object.entries(val).forEach(([key, value]) => {
-              valArray.push({
-                id: key,
-                ...value
-              })
-            });
-            this[data_name] = valArray.reverse();
-            console.log(this[data_name])
-          } else {
-            this[data_name] = []
-          }
-        });
+        await new Promise(resolve => {
+          db.onValue(starCountRef, (snapshot) => {
+            let val = snapshot.val()
+            if (val && typeof val == 'object' && Object.keys(val).length > 0) {
+              let valArray = [];
+              Object.entries(val).forEach(([key, value]) => {
+                valArray.push({
+                  id: key,
+                  ...value
+                })
+              });
+              this[data_name] = valArray.reverse();
+              resolve()
+            } else {
+              this[data_name] = []
+              resolve()
+            }
+          });
+        })
 
       } else {
         this[data_name] = []
+      }
+    },
+    async getBy(data_name, by) {
+      await this.getUserId();
+      if (this.userId) {
+        const starCountRef = db.ref(database, `${data_name}/` + this.userId + "/" + by);
+        return await new Promise(resolve => {
+          db.onValue(starCountRef, (snapshot) => {
+            let val = snapshot.val()
+            if (val) {
+              resolve({
+                success:true,
+                data:val
+              })
+            } else {
+              console.log(val)
+              resolve({
+                success:false,
+                data:null
+              })
+            }
+          });
+        })
+
+      } else {
+        return {
+          success:false,
+          data:null
+        }
       }
     },
     async add(data_name, dataDefault) {

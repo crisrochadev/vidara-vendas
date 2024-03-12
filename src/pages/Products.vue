@@ -10,7 +10,11 @@
       <q-btn icon="add" color="primary" dense to="/new-product" />
     </div>
     <div class="w-full h-full">
-      <q-scroll-area class="w-full h-full">
+      <div class="w-full h-full flex justify-center items-center" v-if="!apiIsReady">
+        <q-spinner-pie color="primary" size="lg"/>
+      </div>
+      <q-scroll-area class="w-full h-full" v-else>
+
         <q-list class="text-info font-bold">
           <q-item v-for="item in products" :key="item.id">
             <q-item-section side>
@@ -31,23 +35,24 @@
                   </span>
                 </p>
               </q-item-label>
-              <q-item-label>
-                {{ item.name }}
+              <q-item-label class="text-primary uppercase">
+                {{ item.description }}
               </q-item-label>
 
             </q-item-section>
-            <q-item-section side class="text-primary font-extrabold">
+            <q-item-section side class="text-secondary font-extrabold">
               {{ item.salePrice.toLocaleString('pt-br', {
                 style: 'currency',
-                currency: 'BRL'
+                currency: 'BRL',
+
               }) }}
             </q-item-section>
             <q-item-section top side>
               <div class="text-grey-8 q-gutter-xs">
                 <q-btn color="info" icon="more_vert" flat dense>
                   <q-menu>
-                    <q-list style="min-width: 100px" class="bg-secondary">
-                      <q-item clickable v-close-popup>
+                    <q-list style="min-width: 100px" class="bg-positive">
+                      <q-item clickable v-close-popup @click="del(item.id)">
                         <q-item-section side>
                           <q-icon name="delete" flate dense color="red" />
                         </q-item-section>
@@ -56,7 +61,7 @@
                         </q-item-section>
                       </q-item>
                       <q-separator />
-                      <q-item clickable v-close-popup>
+                      <q-item clickable v-close-popup @click="edit(item.id)">
                         <q-item-section side>
                           <q-icon name="edit" flate dense color="blue" />
                         </q-item-section>
@@ -77,263 +82,15 @@
 </template>
 
 <script>
+import { useData } from 'src/stores/data';
+import { useQuasar } from 'quasar';
 export default {
   data() {
     return {
-      allProducts: [
-        {
-          code: '12344',
-          name: 'nome do produto 1',
-          salePrice: 129.80,
-          price: 100,
-          qtd: 10
-        },
-        {
-          code: '12344',
-          name: 'nome do produto 1',
-          salePrice: 129.80,
-          price: 100,
-          qtd: 10
-        },
-        {
-          code: '12344',
-          name: 'nome do produto 1',
-          salePrice: 129.80,
-          price: 100,
-          qtd: 10
-        },
-        {
-          code: '12344',
-          name: 'nome do produto 1',
-          salePrice: 129.80,
-          price: 100,
-          qtd: 10
-        },
-        {
-          code: '12344',
-          name: 'nome do produto 1',
-          salePrice: 129.80,
-          price: 100,
-          qtd: 10
-        },
-        {
-          code: '12344',
-          name: 'nome do produto 1',
-          salePrice: 129.80,
-          price: 100,
-          qtd: 10
-        },
-        {
-          code: '12344',
-          name: 'nome do produto 1',
-          salePrice: 129.80,
-          price: 100,
-          qtd: 10
-        },
-        {
-          code: '12344',
-          name: 'nome do produto 1',
-          salePrice: 129.80,
-          price: 100,
-          qtd: 10
-        },
-        {
-          code: '12344',
-          name: 'nome do produto 1',
-          salePrice: 129.80,
-          price: 100,
-          qtd: 10
-        },
-        {
-          code: '12344',
-          name: 'nome do produto 1',
-          salePrice: 129.80,
-          price: 100,
-          qtd: 10
-        },
-        {
-          code: '12344',
-          name: 'nome do produto 1',
-          salePrice: 129.80,
-          price: 100,
-          qtd: 10
-        },
-        {
-          code: '12344',
-          name: 'nome do produto 1',
-          salePrice: 129.80,
-          price: 100,
-          qtd: 10
-        },
-        {
-          code: '12344',
-          name: 'nome do produto 1',
-          salePrice: 129.80,
-          price: 100,
-          qtd: 10
-        },
-        {
-          code: '12344',
-          name: 'nome do produto 1',
-          salePrice: 129.80,
-          price: 100,
-          qtd: 10
-        },
-        {
-          code: '12344',
-          name: 'nome do produto 1',
-          salePrice: 129.80,
-          price: 100,
-          qtd: 10
-        },
-        {
-          code: '12344',
-          name: 'nome do produto 1',
-          salePrice: 129.80,
-          price: 100,
-          qtd: 10
-        },
-        {
-          code: '12344',
-          name: 'nome do produto 1',
-          salePrice: 129.80,
-          price: 100,
-          qtd: 10
-        },
-        {
-          code: '12344',
-          name: 'nome do produto 1',
-          salePrice: 129.80,
-          price: 100,
-          qtd: 10
-        },
-        {
-          code: '12344',
-          name: 'nome do produto 1',
-          salePrice: 129.80,
-          price: 100,
-          qtd: 10
-        },
-        {
-          code: '12344',
-          name: 'nome do produto 1',
-          salePrice: 129.80,
-          price: 100,
-          qtd: 10
-        },
-        {
-          code: '12344',
-          name: 'nome do produto 1',
-          salePrice: 129.80,
-          price: 100,
-          qtd: 10
-        },
-        {
-          code: '12344',
-          name: 'nome do produto 1',
-          salePrice: 129.80,
-          price: 100,
-          qtd: 10
-        },
-        {
-          code: '12344',
-          name: 'nome do produto 1',
-          salePrice: 129.80,
-          price: 100,
-          qtd: 10
-        },
-        {
-          code: '12344',
-          name: 'nome do produto 1',
-          salePrice: 129.80,
-          price: 100,
-          qtd: 10
-        },
-        {
-          code: '12344',
-          name: 'nome do produto 1',
-          salePrice: 129.80,
-          price: 100,
-          qtd: 10
-        },
-        {
-          code: '12344',
-          name: 'nome do produto 1',
-          salePrice: 129.80,
-          price: 100,
-          qtd: 10
-        },
-        {
-          code: '12344',
-          name: 'nome do produto 1',
-          salePrice: 129.80,
-          price: 100,
-          qtd: 10
-        },
-        {
-          code: '12344',
-          name: 'nome do produto 1',
-          salePrice: 129.80,
-          price: 100,
-          qtd: 10
-        },
-        {
-          code: '12344',
-          name: 'nome do produto 1',
-          salePrice: 129.80,
-          price: 100,
-          qtd: 10
-        },
-        {
-          code: '12344',
-          name: 'nome do produto 1',
-          salePrice: 129.80,
-          price: 100,
-          qtd: 10
-        },
-        {
-          code: '12344',
-          name: 'nome do produto 1',
-          salePrice: 129.80,
-          price: 100,
-          qtd: 10
-        },
-        {
-          code: '12344',
-          name: 'nome do produto 1',
-          salePrice: 129.80,
-          price: 100,
-          qtd: 10
-        },
-        {
-          code: '12344',
-          name: 'nome do produto 1',
-          salePrice: 129.80,
-          price: 100,
-          qtd: 10
-        },
-        {
-          code: '12344',
-          name: 'nome do produto 1',
-          salePrice: 129.80,
-          price: 100,
-          qtd: 10
-        },
-        {
-          code: '12344',
-          name: 'nome do produto 1',
-          salePrice: 129.80,
-          price: 100,
-          qtd: 10
-        },
-        {
-          code: '12344',
-          name: 'nome do produto 1',
-          salePrice: 129.80,
-          price: 100,
-          qtd: 10
-        }
-      ],
+      store:useData(),
+      $q:useQuasar(),
+      allProducts: [],
+      apiIsReady:false,
       columns: [
         {
           label: 'Qtd',
@@ -343,8 +100,8 @@ export default {
         },
         {
           label: 'Produto',
-          name: 'product',
-          field: 'name',
+          name: 'description',
+          field: 'description',
           show: true,
         },
         {
@@ -373,9 +130,24 @@ export default {
       search: ''
     }
   },
+  async mounted(){
+    await this.store.getAll("products")
+    // this.allProducts = JSON.parse(JSON.stringify(this.store.products))
+    console.log(this.store.products)
+    this.apiIsReady = true;
+  },
   computed: {
     products() {
-      return this.allProducts.filter(c => c.name.toLowerCase().includes(this.search.toLowerCase()) || c.code.toString().includes(this.search.toLowerCase()))
+      return this.store.products.filter(c => c.description.toLowerCase().includes(this.search.toLowerCase()) || c.code.toString().includes(this.search.toLowerCase()))
+    }
+  },
+  methods:{
+    async del(id){
+    
+      await this.store.del("products",id)
+    },
+    edit(id){
+      this.$router.push("/new-product?id=" + id)
     }
   }
 }

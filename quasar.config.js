@@ -90,17 +90,7 @@ module.exports = configure(function (/* ctx */) {
 
     // https://v2.quasar.dev/quasar-cli-vite/quasar-config-js#framework
     framework: {
-      config: {
-        brand:{
-          primary:"#daa420",
-          secondary:"#20213D",
-          positive:"#20213D",
-          accent:"#353654",
-          info:"#ffffff",
-          positive:'#20213D'
-        }
-      },
-
+   
       // iconSet: 'material-icons', // Quasar icon set
       // lang: 'en-US', // Quasar language pack
 
@@ -112,7 +102,26 @@ module.exports = configure(function (/* ctx */) {
       // directives: [],
 
       // Quasar plugins
-      plugins: ["Notify","Dialog","Loading"]
+      plugins: ["Notify","Dialog","Loading"],
+      config: {
+        brand:{
+          primary:"#daa420",
+          secondary:"#20213D",
+          positive:"#20213D",
+          accent:"#353654",
+          info:"#ffffff",
+          positive:'#20213D'
+        },
+        loading:{
+          spinner: 'QSpinnerPie',
+          spinnerColor: 'primary',
+          spinnerSize: 140,
+          backgroundColor: 'secondary',
+          message: 'aguarde...',
+          messageColor: 'primary'
+        }
+      },
+
     },
 
     // animations: 'all', // --- includes all animations
